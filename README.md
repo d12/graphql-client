@@ -8,14 +8,14 @@ GraphQL Client is a Ruby library for declaring, composing and executing GraphQL 
 
 Sample configuration for a GraphQL Client to query from the [SWAPI GraphQL Wrapper](https://github.com/graphql/swapi-graphql).
 
-``` ruby
+```ruby
 require "graphql/client"
 require "graphql/client/http"
 
 # Star Wars API example wrapper
 module SWAPI
   # Configure GraphQL endpoint using the basic HTTP network adapter.
-  HTTP = GraphQL::Client::HTTP.new("http://graphql-swapi.parseapp.com/") do
+  HTTP = GraphQL::Client::HTTP.new("https://example.com/graphql") do
     def headers(context)
       # Optionally set any HTTP headers
       { "User-Agent": "My Client" }
@@ -57,7 +57,7 @@ If you haven't already, [familiarize yourself with the GraphQL query syntax](htt
 
 This client library encourages all GraphQL queries to be declared statically and assigned to a Ruby constant.
 
-``` ruby
+```ruby
 HeroNameQuery = SWAPI::Client.parse <<-'GRAPHQL'
   query {
     hero {
@@ -66,6 +66,7 @@ HeroNameQuery = SWAPI::Client.parse <<-'GRAPHQL'
   }
 GRAPHQL
 ```
+
 Queries can reference variables that are passed in at query execution time.
 
 ```ruby
@@ -80,7 +81,7 @@ GRAPHQL
 
 Fragments are declared similarly.
 
-``` ruby
+```ruby
 HumanFragment = SWAPI::Client.parse <<-'GRAPHQL'
   fragment on Human {
     name
@@ -91,7 +92,7 @@ GRAPHQL
 
 To include a fragment in a query, reference the fragment by constant.
 
-``` ruby
+```ruby
 HeroNameQuery = SWAPI::Client.parse <<-'GRAPHQL'
   {
     luke: human(id: "1000") {
@@ -106,7 +107,7 @@ GRAPHQL
 
 This works for namespaced constants.
 
-``` ruby
+```ruby
 module Hero
   Query = SWAPI::Client.parse <<-'GRAPHQL'
     {
@@ -127,7 +128,7 @@ end
 
 Pass the reference of a parsed query definition to `GraphQL::Client#query`. Data is returned back in a wrapped `GraphQL::Client::Schema::ObjectType` struct that provides Ruby-ish accessors.
 
-``` ruby
+```ruby
 result = SWAPI::Client.query(Hero::Query)
 
 # The raw data is Hash of JSON values
@@ -135,15 +136,17 @@ result = SWAPI::Client.query(Hero::Query)
 
 # The wrapped result allows to you access data with Ruby methods
 result.data.luke.home_planet
-```
+
 `GraphQL::Client#query` also accepts variables and context parameters that can be leveraged by the underlying network executor.
 
-``` ruby
+```ruby
 result = SWAPI::Client.query(Hero::HeroFromEpisodeQuery, variables: {episode: "JEDI"}, context: {user_id: current_user_id})
 ```
+
 ### Rails ERB integration
 
 If you're using Ruby on Rails ERB templates, theres a ERB extension that allows static queries to be defined in the template itself.
+
 
 ```erb
 <%# app/views/humans/human.html.erb %>
@@ -231,7 +234,7 @@ end
 
 Add `graphql-client` to your app's Gemfile:
 
-``` ruby
+```ruby
 gem 'graphql-client'
 ```
 

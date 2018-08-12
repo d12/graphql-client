@@ -6,6 +6,8 @@ require "ostruct"
 require_relative "foo_helper"
 
 class TestQueryResult < MiniTest::Test
+  GraphQL::DeprecatedDSL.activate if GraphQL::VERSION > "1.8"
+
   DateTime = GraphQL::ScalarType.define do
     name "DateTime"
     coerce_input ->(value, ctx) do
@@ -931,6 +933,23 @@ class TestQueryResult < MiniTest::Test
 
     owner = Temp::UserFragment.new(owner)
     assert_equal "josh", owner.login
+  end
+
+  def test_parse_fragment_spread_with_local_fragment
+    Temp.const_set :Queries, @client.parse(<<-'GRAPHQL')
+      fragment RepositoryFragment on Repository {
+        name
+      }
+
+      query Query {
+        repository {
+          ...RepositoryFragment
+        }
+      }
+    GRAPHQL
+
+    response = @client.query(Temp::Queries::Query)
+    assert_equal "rails", response.data.repository.name
   end
 
   def test_supports_unions_with_array_fields
