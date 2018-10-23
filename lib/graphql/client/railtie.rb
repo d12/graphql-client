@@ -40,7 +40,7 @@ module GraphQL
       initializer "graphql.configure_views_namespace" do |app|
         require "graphql/client/view_module"
 
-        path = app.paths["app/views"].first
+        path = config.graphql.views_path || app.paths["app/views"].first
 
         config.watchable_dirs[path] = [:erb]
 
