@@ -40,11 +40,9 @@ module GraphQL
       config.after_initialize do |app|
         require "graphql/client/view_module"
 
-        paths = [app.paths["app/views"].first, config.graphql.client_view_paths].flatten.uniq.compact
+        path = config.graphql.client_views_path || app.paths["app/views"].first
 
-        paths.each do |path|
-          config.watchable_dirs[path] = [:erb]
-        end
+        config.watchable_dirs[path] = [:erb]
 
         Object.const_set(:Views, Module.new do
           extend GraphQL::Client::ViewModule
