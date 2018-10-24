@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'rails/generators/base'
+require "rails/generators/base"
 
 module GraphqlClient
   class InstallGenerator < Rails::Generators::Base
     desc "Install GraphQL::Client boilerplate code"
-    source_root File.expand_path('../templates', __FILE__)
+    source_root File.expand_path("../templates", __FILE__)
 
     class_option :schema,
       type: :string,
@@ -15,12 +15,13 @@ module GraphqlClient
     def install
       template("initializer.erb", "config/initializers/graphql_client.rb")
 
-      inject_into_file 'app/controllers/application_controller.rb', after: "class ApplicationController < ActionController::Base\n" do <<-'RUBY'
+      inject_into_file "app/controllers/application_controller.rb", after: "class ApplicationController < ActionController::Base\n" do <<-'RUBY'
   def graphql_context
     # Add your context here
     {}
   end
 RUBY
+      end
     end
 
     private
