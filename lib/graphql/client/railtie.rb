@@ -42,11 +42,14 @@ module GraphQL
 
         path = config.graphql.client_views_path || app.paths["app/views"].first
 
+        client = config.graphql.client
+
         config.watchable_dirs[path] = [:erb]
 
         Object.const_set(:Views, Module.new do
           extend GraphQL::Client::ViewModule
           self.path = path
+          self.client = client
         end)
       end
     end
