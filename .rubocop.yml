@@ -9,3 +9,7 @@ AllCops:
 
 GraphQL/Heredoc:
   Enabled: true
+
+Naming/FileName:
+  Exclude:
+    - lib/graphql-client.rb
