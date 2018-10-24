@@ -13,7 +13,7 @@ module GraphqlClient
       desc: "Name for the schema constant (default: {app_name}Schema)"
 
     def install
-      template("initializer.erb", "config/initializers/graphql_client.rb")
+      template("initializer.erb", "config/initializers/graphql-client.rb")
 
       inject_into_file "app/controllers/application_controller.rb", after: "class ApplicationController < ActionController::Base\n" do <<-'RUBY'
   def graphql_context
