@@ -40,7 +40,7 @@ module GraphQL
       config.after_initialize do |app|
         require "graphql/client/view_module"
 
-        path = config.graphql.client_views_path || app.paths["app/views"].first
+        path = Rails.root.join("lib/api/app/views").to_path
 
         client = config.graphql.client
 
